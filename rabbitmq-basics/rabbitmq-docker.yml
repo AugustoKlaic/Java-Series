@@ -1,0 +1,21 @@
+version: '3.8'
+
+services:
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: 'rabbitmq-server'
+    environment:
+      RABBITMQ_DEFAULT_USER: guest
+      RABBITMQ_DEFAULT_PASS: guest
+    ports:
+      - "5672:5672"      # Porta padrão do RabbitMQ
+      - "15672:15672"    # Porta da interface de gerenciamento
+    volumes:
+      - rabbitmq_data:/var/lib/rabbitmq
+    networks:
+      - app-network
+volumes:
+  rabbitmq_data:
+networks:
+  app-network:
+    driver: bridge
