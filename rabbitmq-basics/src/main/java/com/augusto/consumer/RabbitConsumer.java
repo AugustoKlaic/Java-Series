@@ -3,7 +3,7 @@ package com.augusto.consumer;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.stereotype.Component;
 
-import static com.augusto.configuration.RabbitMqConfiguration.RABBIT_BASICS_QUEUE;
+import static com.augusto.configuration.RabbitConfiguration.RABBIT_BASICS_QUEUE;
 
 @Component
 public class RabbitConsumer {

@@ -3,7 +3,7 @@ package com.augusto.producer;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.stereotype.Component;
 
-import static com.augusto.configuration.RabbitMqConfiguration.RABBIT_BASICS_EXCHANGE;
+import static com.augusto.configuration.RabbitConfiguration.RABBIT_BASICS_EXCHANGE;
 
 @Component
 public class RabbitProducer {
