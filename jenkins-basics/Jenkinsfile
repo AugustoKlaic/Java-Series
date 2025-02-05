@@ -13,8 +13,10 @@ pipeline {
         }
         stage('Build') {
             steps {
-                echo 'Building...'
-                sh './gradlew clean build'
+                echo 'Checking working directory...'
+                sh 'pwd'
+                sh 'ls -lah'
+                sh 'cd jenkins-basics && chmod +x gradlew && ./gradlew clean build'
             }
         }
     }
