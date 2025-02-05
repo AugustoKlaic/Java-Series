@@ -5,6 +5,8 @@ pipeline {
         stage ('Pre-requisites') {
             steps {
                 script {
+                    sh 'sudo apt-get update && sudo apt-get install -y unzip'
+
                     if (!fileExists('/usr/local/bin/gradle')) {
                         sh 'curl -s https://get.sdkman.io | bash'
                         sh 'source ~/.sdkman/bin/sdkman-init.sh && sdk install gradle'
