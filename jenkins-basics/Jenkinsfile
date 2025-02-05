@@ -11,12 +11,17 @@ pipeline {
                 }
             }
         }
+        stage('Prepare Gradle') {
+            steps {
+                echo 'Ensuring gradle wrapper exists...'
+                sh 'ls -lah'
+                sh 'cd jenkins-basics && chmod +x gradlew && ./gradlew wrapper --gradle-version 8.0'
+            }
+        }
         stage('Build') {
             steps {
-                echo 'Checking working directory...'
-                sh 'pwd'
-                sh 'ls -lah'
-                sh 'cd jenkins-basics && chmod +x gradlew && ./gradlew clean build'
+                echo 'Building...'
+                sh 'cd jenkins-basics && ./gradlew clean build'
             }
         }
     }
