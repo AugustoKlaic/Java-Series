@@ -1,0 +1,54 @@
+version: '3'
+services:
+  jenkins:
+    container_name: "Jenkins"
+    image: jenkins/jenkins:lts
+    privileged: true
+    user: root
+    ports:
+      - 8081:8080
+      - 50000:50000
+    environment:
+      - DOCKER_HOST=tcp://dind:2375
+    volumes:
+      - jenkins_home:/var/jenkins_home
+      - /var/run/docker.sock:/var/run/docker.sock
+    networks:
+      - jenkins_network
+    depends_on:
+      - dind
+  dind:
+    image: docker:dind
+    container_name: "jenkins-dind"
+    privileged: true
+    environment:
+      - DOCKER_TLS_CERTDIR=""
+    ports:
+      - 2375:2375
+    networks:
+      - jenkins_network
+    volumes:
+      - dind_storage:/var/lib/docker
+  jenkins-agent:
+    image: jenkins/inbound-agent
+    container_name: "jenkins-agent"
+    depends_on:
+      - jenkins
+    environment:
+      - JENKINS_URL=http://jenkins:8080
+      - JENKINS_SECRET={AGENT_TOKEN}
+      - JENKINS_AGENT_NAME=docker-agent
+    volumes:
+      - jenkins_agent:/home/jenkins/agent
+    networks:
+      - jenkins_network
+networks:
+  jenkins_network:
+
+volumes:
+  jenkins_home:
+    name: jenkins_home
+  dind_storage:
+    name: dind_storage
+  jenkins_agent:
+    name: jenkins_agent
