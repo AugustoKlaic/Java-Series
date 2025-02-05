@@ -15,7 +15,7 @@ pipeline {
             steps {
                 echo 'Ensuring gradle wrapper exists...'
                 sh 'ls -lah'
-                sh 'cd jenkins-basics && chmod +x gradlew && ./gradlew wrapper --gradle-version 8.0'
+                sh 'cd jenkins-basics && chmod +x gradlew && ./gradlew wrapper --gradle-version 8.6'
             }
         }
         stage('Build') {
