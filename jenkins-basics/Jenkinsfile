@@ -2,9 +2,19 @@ pipeline {
     agent any
 
     stages {
+        stage('Checkout') {
+            steps {
+                echo 'Cloning sub-directory of main repository...'
+                script {
+                    git 'https://github.com/AugustoKlaic/Java-Series.git'
+                    sh 'git submodule update --init --recursive jenkins-basics'
+                }
+            }
+        }
         stage('Build') {
             steps {
                 echo 'Building...'
+                sh './gradlew clean build'
             }
         }
     }
