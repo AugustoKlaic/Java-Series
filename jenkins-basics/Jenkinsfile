@@ -2,6 +2,16 @@ pipeline {
     agent any
 
     stages {
+        stage ('Pre-requisites') {
+            steps {
+                script {
+                    if (!fileExists('/usr/local/bin/gradle')) {
+                        sh 'curl -s https://get.sdkman.io | bash'
+                        sh 'source ~/.sdkman/bin/sdkman-init.sh && sdk install gradle'
+                    }
+                }
+            }
+        }
         stage('Checkout') {
             steps {
                 echo 'Cloning sub-directory of main repository...'
