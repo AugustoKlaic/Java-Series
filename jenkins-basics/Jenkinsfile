@@ -1,8 +1,5 @@
 pipeline {
     agent any
-    tools {
-            gradle "8.6"
-        }
     stages {
         stage('Checkout') {
             steps {
@@ -16,7 +13,7 @@ pipeline {
         stage('Build') {
             steps {
                 echo 'Building...'
-                withGradle {
+                withGradle() {
                     sh 'cd jenkins-basics && ./gradlew clean build'
                 }
             }
