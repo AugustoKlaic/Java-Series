@@ -14,7 +14,7 @@ pipeline {
             steps {
                 echo 'Building...'
                 withGradle() {
-                    sh 'cd jenkins-basics && ./gradlew clean build'
+                    sh 'cd jenkins-basics && gradle clean build'
                 }
             }
         }
