@@ -15,9 +15,7 @@ pipeline {
         stage('Build') {
             steps {
                 echo 'Building...'
-                sh 'cd jenkins-basics'
-                sh 'chmod +x gradlew'
-                sh './gradlew clean build'
+                sh 'cd jenkins-basics && chmod +x gradlew && ./gradlew clean build'
             }
         }
     }
