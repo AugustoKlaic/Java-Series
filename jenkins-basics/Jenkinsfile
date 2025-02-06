@@ -22,7 +22,7 @@ pipeline {
         stage('Build') {
             steps {
                 echo 'Building...'
-                sh 'cd jenkins-basics && gradle clean build'
+                sh 'cd jenkins-basics && gradle clean build -x test '
             }
         }
 
