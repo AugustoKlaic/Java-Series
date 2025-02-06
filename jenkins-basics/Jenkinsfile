@@ -2,7 +2,7 @@ pipeline {
     agent {label 'docker-agent'}
     tools {
         gradle 'gradle-8.6'
-        jdk 'openjdk21'
+        jdk 'jdk-21'
     }
     stages {
         stage('Checkout') {
