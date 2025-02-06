@@ -12,11 +12,39 @@ pipeline {
             }
         }
 
+        stage('Test') {
+            steps {
+                echo 'Testing...'
+                sh 'cd jenkins-basics && gradle clean test'
+            }
+        }
+
         stage('Build') {
             steps {
                 echo 'Building...'
                 sh 'cd jenkins-basics && gradle clean build'
             }
+        }
+
+        stage('Package') {
+            steps {
+                echo 'Packaging...'
+            }
+        }
+
+        stage('Deploy') {
+            steps {
+                echo 'Deploying...'
+            }
+        }
+    }
+
+    post {
+        success {
+            echo 'Build and Deploy succeeded!'
+        }
+        failure {
+            echo 'Build or Deploy failed!'
         }
     }
 }
