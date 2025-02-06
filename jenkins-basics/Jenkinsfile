@@ -1,5 +1,5 @@
 pipeline {
-    agent any
+    agent { label 'docker-agent'}
     stages {
         stage('Checkout') {
             steps {
@@ -13,6 +13,7 @@ pipeline {
         stage('Build') {
             steps {
                 echo 'Building...'
+                sh 'ls'
                 withGradle() {
                     sh 'cd jenkins-basics && chmod +x gradlew && ./gradlew clean build'
                 }
