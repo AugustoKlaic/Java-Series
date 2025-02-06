@@ -13,10 +13,10 @@ pipeline {
         stage('Build') {
             steps {
                 echo 'Building...'
-                sh 'ls'
-                withGradle() {
-                    sh 'cd jenkins-basics && chmod +x gradlew && ./gradlew clean build'
-                }
+                sh 'gradle --version'
+                //withGradle() {
+                //    sh 'cd jenkins-basics && chmod +x gradlew && ./gradlew clean build'
+                //}
             }
         }
     }
