@@ -6,8 +6,8 @@ services:
     privileged: true
     user: root
     ports:
-      - 8081:8080
-      - 50000:50000
+      - "8081:8080"
+      - "50000:50000"
     environment:
       - DOCKER_HOST=tcp://dind:2375
     volumes:
@@ -24,13 +24,13 @@ services:
     environment:
       - DOCKER_TLS_CERTDIR=""
     ports:
-      - 2375:2375
+      - "2375:2375"
     networks:
       - jenkins_network
     volumes:
       - dind_storage:/var/lib/docker
   jenkins-agent:
-    image: jenkins/inbound-agent
+    image: jenkins/inbound-agent:latest-jdk21
     container_name: "jenkins-agent"
     depends_on:
       - jenkins

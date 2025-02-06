@@ -1,9 +1,5 @@
 pipeline {
     agent {label 'docker-agent'}
-    tools {
-        gradle 'gradle-8.6'
-        jdk 'jdk-21'
-    }
     stages {
         stage('Checkout') {
             steps {
@@ -18,7 +14,7 @@ pipeline {
         stage('Build') {
             steps {
                 echo 'Building...'
-                sh 'cd jenkins-basics && chmod +x gradlew && ./gradlew clean build'
+                sh 'cd jenkins-basics && gradle clean build'
             }
         }
     }
