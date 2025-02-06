@@ -1,6 +1,6 @@
 pipeline {
-    agent any
-
+    agent {label 'docker-agent'}
+    tools { gradle 'gradle-8.6'}
     stages {
         stage('Checkout') {
             steps {
