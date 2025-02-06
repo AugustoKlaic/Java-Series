@@ -1,5 +1,6 @@
 pipeline {
     agent any
+
     stages {
         stage('Checkout') {
             steps {
@@ -10,13 +11,11 @@ pipeline {
                 }
             }
         }
+
         stage('Build') {
             steps {
                 echo 'Building...'
-                sh 'gradle --version'
-                //withGradle() {
-                //    sh 'cd jenkins-basics && chmod +x gradlew && ./gradlew clean build'
-                //}
+                sh 'cd jenkins-basics && ./gradlew clean build'
             }
         }
     }
