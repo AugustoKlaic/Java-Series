@@ -30,6 +30,9 @@ pipeline {
         stage('Package') {
             steps {
                 echo 'Packaging...'
+                dir('jenkins-basics') {
+                    sh 'gradle bootJar'
+                }
             }
         }
 
