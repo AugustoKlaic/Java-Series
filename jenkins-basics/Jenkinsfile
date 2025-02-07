@@ -43,13 +43,6 @@ pipeline {
                     sh 'docker cp build/libs/calculator.jar java-app:/app/calculator.jar'
                 }
             }
-
-            steps {
-                dir('jenkins-basics') {
-                    echo 'Starting Java application in container...'
-
-                }
-            }
         }
     }
 
