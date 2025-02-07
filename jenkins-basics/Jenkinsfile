@@ -38,7 +38,17 @@ pipeline {
 
         stage('Deploy') {
             steps {
-                echo 'Deploying...'
+                dir('jenkins-basics') {
+                    echo 'Copying JAR to container...'
+                    sh 'docker cp build/libs/meu-app.jar java-app:/app/app.jar'
+                }
+            }
+
+            steps {
+                dir('jenkins-basics') {
+                    echo 'Starting Java application in container...'
+
+                }
             }
         }
     }

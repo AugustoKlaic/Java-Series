@@ -30,3 +30,9 @@ test {
         events "passed"
     }
 }
+
+jar {
+    manifest {
+        archiveBaseName.set("calculator.jar")
+    }
+}
