@@ -5,24 +5,25 @@ pipeline {
         stage('Checkout') {
             steps {
                 echo 'Cloning sub-directory of main repository...'
-                script {
-                    git 'https://github.com/AugustoKlaic/Java-Series.git'
-                    sh 'git submodule update --init --recursive jenkins-basics'
-                }
+                git branch: 'master', url: 'https://github.com/AugustoKlaic/Java-Series.git'
             }
         }
 
         stage('Test') {
             steps {
                 echo 'Testing...'
-                sh 'cd jenkins-basics && gradle clean test'
+                dir('jenkins-basics') {
+                    sh 'gradle clean test'
+                }
             }
         }
 
         stage('Build') {
             steps {
                 echo 'Building...'
-                sh 'cd jenkins-basics && gradle clean build -x test '
+                dir('jenkins-basics') {
+                    sh 'gradle clean build -x test '
+                }
             }
         }
 
