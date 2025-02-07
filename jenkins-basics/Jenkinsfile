@@ -40,7 +40,7 @@ pipeline {
             steps {
                 dir('jenkins-basics') {
                     echo 'Copying JAR to container...'
-                    sh 'cp home/jenkins/agent/workspace/Jenkins-basics/jenkins-basics/build/libs/calculator.jar java-app:/app/calculator.jar'
+                    sh 'cp build/libs/calculator.jar java-app:/app/calculator.jar'
                 }
             }
         }
