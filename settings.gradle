@@ -1,0 +1,5 @@
+rootProject.name = 'java-series'
+
+include 'jenkins-basics'
+include 'rabbit-basics'
+include 'kafka-basics'
