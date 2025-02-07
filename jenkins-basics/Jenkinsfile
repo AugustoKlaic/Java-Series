@@ -40,7 +40,7 @@ pipeline {
             steps {
                 dir('jenkins-basics') {
                     echo 'Copying JAR to container...'
-                    sh 'docker cp build/libs/calculator.jar java-app:/app/calculator.jar'
+                    sh 'cp build/libs/calculator.jar java-app:/app/calculator.jar'
                 }
             }
         }
