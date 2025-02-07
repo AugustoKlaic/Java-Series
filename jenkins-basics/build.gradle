@@ -33,6 +33,8 @@ test {
 
 jar {
     manifest {
-        archiveBaseName.set("calculator.jar")
+        archiveBaseName.set("calculator")
+        archiveVersion.set("")
+        archiveClassifier.set("")
     }
 }
