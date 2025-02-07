@@ -42,6 +42,15 @@ services:
       - jenkins_agent:/home/jenkins/agent
     networks:
       - jenkins_network
+  java-app:
+    image: eclipse-temurin:17-jdk
+    container_name: "java-app"
+    networks:
+      - jenkins_network
+    volumes:
+      - java_app:/app
+    working_dir: /app
+
 networks:
   jenkins_network:
 
@@ -52,3 +61,5 @@ volumes:
     name: dind_storage
   jenkins_agent:
     name: jenkins_agent
+  java_app:
+    name: java_app
