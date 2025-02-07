@@ -40,8 +40,15 @@ pipeline {
             steps {
                 dir('jenkins-basics') {
                     echo 'Copying JAR to container...'
-                    sh 'cp build/libs/calculator.jar java-app:/app/calculator.jar'
+                    sh 'docker cp build/libs/calculator.jar java-app:/app/calculator.jar'
                 }
+            }
+        }
+
+        stage('Run Application') {
+            steps {
+                echo 'Starting Java application...'
+                sh 'docker exec java-app java -jar /app/calculator.jar &'
             }
         }
     }
