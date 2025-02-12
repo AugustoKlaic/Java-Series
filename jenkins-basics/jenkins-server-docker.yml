@@ -44,17 +44,6 @@ services:
       - jenkins_network
     user: root
     entrypoint: [ "/bin/sh", "-c", "apt-get update && apt-get install -y docker.io && /usr/local/bin/jenkins-agent" ]
-  java-app:
-    image: eclipse-temurin:17-jdk
-    container_name: "java-app"
-    networks:
-      - jenkins_network
-    volumes:
-      - java_app:/app
-    working_dir: /app
-    ports:
-      - "8080:8080"
-    command: [ "tail", "-f", "/dev/null" ]
 
 networks:
   jenkins_network:

@@ -48,7 +48,7 @@ pipeline {
         stage('Run Application') {
             steps {
                 echo 'Starting Java application...'
-                sh 'docker exec java-app java -jar /app/calculator.jar &'
+                sh 'docker run -d --name calculator -p 8080:8080 calculator:latest\n'
             }
         }
     }
