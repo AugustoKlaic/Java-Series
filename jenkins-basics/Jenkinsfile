@@ -36,6 +36,14 @@ pipeline {
             }
         }
 
+        stage('Build Docker Image') {
+            steps {
+                script {
+                    sh 'docker build -t calculator:latest .'
+                }
+            }
+        }
+
         stage('Deploy and Run Application') {
             steps {
                 echo 'Deploying and Starting Java application...'
