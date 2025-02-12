@@ -38,7 +38,8 @@ pipeline {
 
         stage('Build Docker Image') {
             steps {
-                script {
+                echo 'Building docker image...'
+                dir('jenkins-basics') {
                     sh 'docker build -t calculator:latest .'
                 }
             }
@@ -47,7 +48,9 @@ pipeline {
         stage('Deploy and Run Application') {
             steps {
                 echo 'Deploying and Starting Java application...'
-                sh 'docker run -d --name calculator -p 8080:8080 calculator:latest'
+                dir('jenkins-basics') {
+                    sh 'docker run -d --name calculator -p 8080:8080 calculator:latest'
+                }
             }
         }
     }
