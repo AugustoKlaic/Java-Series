@@ -36,19 +36,10 @@ pipeline {
             }
         }
 
-        stage('Deploy') {
+        stage('Deploy and Run Application') {
             steps {
-                dir('jenkins-basics') {
-                    echo 'Copying JAR to container...'
-                    sh 'docker cp build/libs/calculator.jar java-app:/app/calculator.jar'
-                }
-            }
-        }
-
-        stage('Run Application') {
-            steps {
-                echo 'Starting Java application...'
-                sh 'docker run -d --name calculator -p 8080:8080 calculator:latest\n'
+                echo 'Deploying and Starting Java application...'
+                sh 'docker run -d --name calculator -p 8080:8080 calculator:latest'
             }
         }
     }
