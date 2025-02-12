@@ -40,6 +40,7 @@ services:
       - JENKINS_AGENT_NAME=docker-agent
     volumes:
       - jenkins_agent:/home/jenkins/agent
+      - /var/run/docker.sock:/var/run/docker.sock
     networks:
       - jenkins_network
     user: root
