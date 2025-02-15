@@ -4,12 +4,12 @@ plugins {
     id 'io.spring.dependency-management' version '1.1.7'
 }
 
-group = 'com.augusto.bddbasics'
-version = '0.0.1-SNAPSHOT'
+group = 'com.augusto.bdd-basics'
+version = '0.0.1'
 
 java {
     toolchain {
-        languageVersion = JavaLanguageVersion.of(17)
+        languageVersion = JavaLanguageVersion.of(21)
     }
 }
 
@@ -24,8 +24,6 @@ dependencies {
 
     implementation 'io.cucumber:cucumber-java:7.21.1'
     implementation 'io.cucumber:cucumber-spring:7.21.1'
-
-
 }
 
 tasks.named('test') {
