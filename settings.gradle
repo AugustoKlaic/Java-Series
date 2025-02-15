@@ -1,4 +1,4 @@
-rootProject.name = 'java-series'
+rootProject.name = "java-series"
 
 include 'jenkins-basics'
 include 'rabbit-basics'
