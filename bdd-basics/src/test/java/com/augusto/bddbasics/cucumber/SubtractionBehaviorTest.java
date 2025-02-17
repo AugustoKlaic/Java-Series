@@ -1,5 +1,6 @@
 package com.augusto.bddbasics.cucumber;
 
+
 import com.augusto.bddbasics.dto.CalculationRequest;
 import com.augusto.bddbasics.dto.CalculationResponse;
 import com.augusto.bddbasics.service.CalculationService;
@@ -10,7 +11,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class AdditionBehaviorTest {
+public class SubtractionBehaviorTest {
+
 
     private CalculationRequest request;
     private CalculationResponse result;
@@ -23,8 +25,8 @@ public class AdditionBehaviorTest {
         request = new CalculationRequest(operator, operand, operation);
     }
 
-    @When("operator is added with operand")
-    public void whenOperatorIsAddedWithOperand() {
+    @When("operator is subtracted with operand")
+    public void whenOperatorIsSubtractedWithOperand() {
         result = service.doCalculation(request);
     }
 
