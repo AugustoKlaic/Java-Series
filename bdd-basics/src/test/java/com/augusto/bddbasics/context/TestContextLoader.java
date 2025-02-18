@@ -1,4 +1,4 @@
-package com.augusto.bddbasics.cucumber;
+package com.augusto.bddbasics.context;
 
 import io.cucumber.spring.CucumberContextConfiguration;
 import org.springframework.boot.test.context.SpringBootTest;
