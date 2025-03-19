@@ -25,7 +25,7 @@ services:
     container_name: logstash
     restart: always
     volumes:
-      - ./logstash-config:/usr/share/logstash/pipeline
+      - ./config-logstash:/usr/share/logstash/pipeline
     depends_on:
       - elasticsearch
     ports:
@@ -48,6 +48,8 @@ services:
       - elasticsearch
     networks:
       - elk
+    volumes:
+      - ./config-kibana/kibana-config.ndjson:/usr/share/kibana/config/kibana_saved_objects.ndjson
 networks:
   elk:
     driver: bridge
