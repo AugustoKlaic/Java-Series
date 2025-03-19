@@ -48,8 +48,6 @@ services:
       - elasticsearch
     networks:
       - elk
-    volumes:
-      - ./config-kibana/kibana-config.ndjson:/usr/share/kibana/config/kibana_saved_objects.ndjson
 networks:
   elk:
     driver: bridge
