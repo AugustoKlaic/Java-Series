@@ -1,0 +1,33 @@
+databaseChangeLog:
+  - changeSet:
+      id: 1
+      author: augusto
+      changes:
+        - sqlFile:
+            path: scripts/202505301120_create-table-person.sql
+            relativeToChangelogFile: true
+            encoding: utf8
+  - changeSet:
+      id: 2
+      author: augusto
+      changes:
+        - sqlFile:
+            path: scripts/202505301130_insert-person.sql
+            relativeToChangelogFile: true
+            encoding: utf8
+  - changeSet:
+      id: 3
+      author: augusto
+      changes:
+        - sqlFile:
+            path: scripts/202505301140_alter-table-add-email-column.sql
+            relativeToChangelogFile: true
+            encoding: utf8
+  - changeSet:
+      id: 4
+      author: augusto
+      changes:
+        - sqlFile:
+            path: scripts/202505301150_insert-person-with-email.sql
+            relativeToChangelogFile: true
+            encoding: utf8
