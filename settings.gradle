@@ -1,6 +1,8 @@
 rootProject.name = "java-series"
 
 include 'jenkins-basics'
-include 'rabbit-basics'
+include 'rabbitmq-basics'
 include 'kafka-basics'
 include 'bdd-basics'
+include 'elk-basics'
+include 'liquibase'
