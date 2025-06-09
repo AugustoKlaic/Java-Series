@@ -2,10 +2,9 @@ package com.augusto.rediscache.controller;
 
 import com.augusto.rediscache.domain.Person;
 import com.augusto.rediscache.service.PersonService;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/person")
@@ -20,5 +19,15 @@ public class PersonController {
     @GetMapping("/{id}")
     public Person getById(@PathVariable("id") Long id) {
         return service.findById(id);
+    }
+
+    @GetMapping
+    public List<Person> getAll() {
+        return service.findAll();
+    }
+
+    @PostMapping
+    Long cratePerson(@RequestBody Person person) {
+        return service.createPerson(person);
     }
 }
