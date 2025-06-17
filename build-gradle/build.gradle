@@ -1,11 +1,13 @@
 plugins {
     id 'java'
+    id 'jacoco'
+    id 'checkstyle'
     id 'org.springframework.boot' version '3.5.0'
     id 'io.spring.dependency-management' version '1.1.7'
 }
 
 group = 'com.augusto.buildgradle'
-version = '0.0.1-SNAPSHOT'
+version = '1.0.0'
 
 java {
     toolchain {
@@ -18,11 +20,68 @@ repositories {
 }
 
 dependencies {
-    implementation 'org.springframework.boot:spring-boot-starter'
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 }
 
-tasks.named('test') {
+test {
     useJUnitPlatform()
+    testLogging {
+        events "passed", "skipped", "failed"
+    }
+}
+
+jacocoTestReport {
+    dependsOn test
+    reports {
+        xml.required = true
+        html.required = true
+    }
+}
+
+checkstyle {
+    toolVersion = '10.12.3'
+    config = resources.text.fromFile('config/checkstyle/checkstyle.xml')
+}
+
+tasks.register('hello') {
+    group = 'User tasks'
+    description = 'Imprime Hello Gradle'
+    doLast {
+        println 'Hello Gradle!'
+    }
+}
+
+tasks.register('printDependencies') {
+    group = 'User tasks'
+    description = 'Lista todas as dependências'
+    doLast {
+        configurations.compileClasspath.each { println it }
+    }
+}
+
+tasks.register('buildJarForDeploy', Jar) {
+    group = 'Deployment'
+    description = 'Gera um JAR executável para deploy'
+
+    dependsOn bootJar
+    archiveClassifier.set('deploy')
+    from sourceSets.main.output
+
+    doLast {
+        def jarFile = archiveFile.get().asFile
+        def targetDir = file("deploy")
+        targetDir.mkdirs()
+        copy {
+            from jarFile
+            into targetDir
+        }
+        println "JAR copiado para ${targetDir.absolutePath}"
+    }
+}
+
+build {
+    dependsOn jacocoTestReport
 }
