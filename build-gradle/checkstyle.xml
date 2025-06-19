@@ -1,0 +1,42 @@
+<!DOCTYPE module PUBLIC
+        "-//Puppy Crawl//DTD Check Configuration 1.3//EN"
+        "http://www.puppycrawl.com/dtds/configuration_1_3.dtd">
+<module name="Checker">
+
+    <!-- line size limit, ignore "imports" lines -->
+    <module name="LineLength">
+        <property name="max" value="110"/>
+        <property name="ignorePattern" value="^(package|import)|.*(a href|http|https).*"/>
+    </module>
+
+    <module name="TreeWalker">
+
+        <!-- indentation and spacing -->
+        <module name="WhitespaceAfter"/>
+        <module name="WhitespaceAround"/>
+
+        <module name="Indentation">
+            <property name="basicOffset" value="4"/>
+            <property name="braceAdjustment" value="0"/>
+            <property name="caseIndent" value="4"/>
+            <property name="throwsIndent" value="4"/>
+        </module>
+
+        <!-- imports and empty blocks -->
+        <module name="UnusedImports"/>
+        <module name="RedundantImport"/>
+        <module name="NeedBraces"/>
+        <module name="AvoidStarImport">
+            <property name="severity" value="warning" />
+        </module>
+        <module name="EmptyBlock">
+            <property name="option" value="text"/>
+        </module>
+
+        <!-- name conventions -->
+        <module name="LocalVariableName"/>
+        <module name="MethodName"/>
+        <module name="ParameterName"/>
+        <module name="TypeName"/>
+    </module>
+</module>

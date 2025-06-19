@@ -43,7 +43,7 @@ jacocoTestReport {
 
 checkstyle {
     toolVersion = '10.12.3'
-    config = resources.text.fromFile('config/checkstyle/checkstyle.xml')
+    configFile = file("$projectDir/checkstyle.xml")
 }
 
 tasks.register('hello') {
@@ -54,18 +54,11 @@ tasks.register('hello') {
     }
 }
 
-tasks.register('printDependencies') {
-    group = 'User tasks'
-    description = 'List all dependencies'
-    doLast {
-        configurations.compileClasspath.each { println it }
-    }
-}
-
 tasks.register('buildJarForDeploy', Jar) {
     group = 'Deployment'
     description = 'Generate executable JAR for deploy'
 
+    dependsOn build
     dependsOn bootJar
     archiveClassifier.set('deploy')
     from sourceSets.main.output
