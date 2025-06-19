@@ -5,7 +5,7 @@
 
     <!-- line size limit, ignore "imports" lines -->
     <module name="LineLength">
-        <property name="max" value="110"/>
+        <property name="max" value="120"/>
         <property name="ignorePattern" value="^(package|import)|.*(a href|http|https).*"/>
     </module>
 

@@ -2,8 +2,27 @@ rootProject.name = "java-series"
 
 buildCache {
     local {
-        enabled = true       // Habilita o cache local
-        directory = "${rootDir}/.gradle-build-cache" // Opcional: onde armazenar
-        removeUnusedEntriesAfterDays = 30            // Limpa entradas antigas
+        enabled = true       // Enable local cache
+        directory = "${rootDir}/.gradle-build-cache" // Optional: where to store
+        removeUnusedEntriesAfterDays = 2            // clean old entries
     }
 }
+
+/* to apply the cache:
+    set in gradle.properties -> org.gradle.caching=true
+
+    first run -> gradle build --build-cache --info
+        This will build the project and create the cache
+        You will se on terminal the messages for some tasks that the cache was created
+        > Task :jacocoTestReport UP-TO-DATE
+          Build cache key for task ':jacocoTestReport' is 4bfe7c474db55d2661163e6415da7368
+
+    second run -> gradle clean --no-build-cache
+        This will clean the build but not the cache, to be used on next step
+
+    third run -> gradle build --info
+        This will build the project again and now it will use the cache. Faster build time
+        You will see in terminal the message
+        > Task :jacocoTestReport FROM-CACHE
+          Build cache key for task ':jacocoTestReport' is efc177c3f3171fa6ad3f3e46dd8c3a33
+* */

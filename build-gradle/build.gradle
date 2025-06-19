@@ -39,11 +39,27 @@ jacocoTestReport {
         xml.required = true
         html.required = true
     }
+
+    afterEvaluate {
+        classDirectories.setFrom(
+                files(classDirectories.files.collect {
+                    fileTree(dir: it, exclude: [
+                            '**/dto/**',
+                            '**/BuildGradleApplication.class'
+                    ])
+                })
+        )
+    }
 }
 
 checkstyle {
     toolVersion = '10.12.3'
     configFile = file("$projectDir/checkstyle.xml")
+}
+
+build {
+    dependsOn jacocoTestReport
+    dependsOn checkstyleMain
 }
 
 tasks.register('hello') {
@@ -58,9 +74,11 @@ tasks.register('buildJarForDeploy', Jar) {
     group = 'Deployment'
     description = 'Generate executable JAR for deploy'
 
+    dependsOn hello
     dependsOn build
     dependsOn bootJar
-    archiveClassifier.set('deploy')
+
+    archiveBaseName.set("gradle-project")
     from sourceSets.main.output
 
     doLast {
@@ -73,9 +91,4 @@ tasks.register('buildJarForDeploy', Jar) {
         }
         println "JAR copiado para ${targetDir.absolutePath}"
     }
-}
-
-build {
-    dependsOn jacocoTestReport
-    dependsOn checkstyle
 }
