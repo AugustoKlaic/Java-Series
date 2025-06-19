@@ -1,1 +1,9 @@
 rootProject.name = "java-series"
+
+buildCache {
+    local {
+        enabled = true       // Habilita o cache local
+        directory = "${rootDir}/.gradle-build-cache" // Opcional: onde armazenar
+        removeUnusedEntriesAfterDays = 30            // Limpa entradas antigas
+    }
+}

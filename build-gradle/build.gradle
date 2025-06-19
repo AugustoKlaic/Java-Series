@@ -48,7 +48,7 @@ checkstyle {
 
 tasks.register('hello') {
     group = 'User tasks'
-    description = 'Imprime Hello Gradle'
+    description = 'Print Hello Gradle'
     doLast {
         println 'Hello Gradle!'
     }
@@ -56,7 +56,7 @@ tasks.register('hello') {
 
 tasks.register('printDependencies') {
     group = 'User tasks'
-    description = 'Lista todas as dependências'
+    description = 'List all dependencies'
     doLast {
         configurations.compileClasspath.each { println it }
     }
@@ -64,7 +64,7 @@ tasks.register('printDependencies') {
 
 tasks.register('buildJarForDeploy', Jar) {
     group = 'Deployment'
-    description = 'Gera um JAR executável para deploy'
+    description = 'Generate executable JAR for deploy'
 
     dependsOn bootJar
     archiveClassifier.set('deploy')
@@ -84,4 +84,5 @@ tasks.register('buildJarForDeploy', Jar) {
 
 build {
     dependsOn jacocoTestReport
+    dependsOn checkstyle
 }
