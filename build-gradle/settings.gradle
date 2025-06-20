@@ -13,7 +13,7 @@ buildCache {
 
     first run -> gradle build --build-cache --info
         This will build the project and create the cache
-        You will se on terminal the messages for some tasks that the cache was created
+        You will see on terminal the messages for some tasks that the cache was created
         > Task :jacocoTestReport UP-TO-DATE
           Build cache key for task ':jacocoTestReport' is 4bfe7c474db55d2661163e6415da7368
 
@@ -22,7 +22,7 @@ buildCache {
 
     third run -> gradle build --info
         This will build the project again and now it will use the cache. Faster build time
-        You will see in terminal the message
+        You will see in terminal the message "from cache" signalizing the cache use
         > Task :jacocoTestReport FROM-CACHE
           Build cache key for task ':jacocoTestReport' is efc177c3f3171fa6ad3f3e46dd8c3a33
-* */
+*/
