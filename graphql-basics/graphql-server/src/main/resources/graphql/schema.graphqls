@@ -1,3 +1,30 @@
+# available queries
 type Query {
-    hello: String
+    clientById(id: ID!): ClientProfile
+    allClients: [ClientProfile]
+
+    # resolvers for generic queries
+    clientsByTransactionDate(date: String!): [ClientProfile]
+    clientsWithMinTransactionTotal(minValue: Float!): [ClientProfile]
+}
+
+# mapping the java types
+type ClientProfile {
+    id: ID
+    name: String
+    nationalId: String
+    birthDate: String
+    transactions: [TransactionHistory]
+
+    # resolvers for the clientProfile additional data
+    totalTransactionAmount: Float
+    transactionsByType(type: String): [TransactionHistory]
+}
+
+type TransactionHistory {
+    id: ID
+    clientId: ID
+    value: Float
+    transactionDate: String
+    type: String
 }
