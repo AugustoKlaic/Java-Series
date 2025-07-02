@@ -1,0 +1,12 @@
+def graphqlServices = [
+        'graphql-server',
+        'graphql-info-provider-a',
+        'graphql-info-provider-b'
+]
+
+tasks.register('buildAllBootJar') {
+    group = 'Custom tasks'
+    description = 'Build all bootJars for GraphQL services'
+
+    dependsOn graphqlServices.collect { ":$it:bootJar" }
+}
