@@ -1,0 +1,31 @@
+version: '3.8'
+services:
+  graphql-server:
+    build:
+      context: ./graphql-server
+    ports:
+      - "8080:8080"
+    depends_on:
+      - info-provider-a
+      - info-provider-b
+    networks:
+      - graphql-net
+
+  info-provider-a:
+    build:
+      context: ./graphql-info-provider-A
+    ports:
+      - "8081:8081"
+    networks:
+      - graphql-net
+
+  info-provider-b:
+    build:
+      context: ./graphql-info-provider-B
+    ports:
+      - "8082:8082"
+    networks:
+      - graphql-net
+
+networks:
+  graphql-net:

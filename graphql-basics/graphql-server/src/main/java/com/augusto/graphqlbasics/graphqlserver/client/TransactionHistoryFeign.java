@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@FeignClient(name = "transaction-history", url = "http://localhost:8082")
+@FeignClient(name = "transaction-history", url = "http://info-provider-b:8082")
 public interface TransactionHistoryFeign {
 
     @PostMapping("/transaction-history")
