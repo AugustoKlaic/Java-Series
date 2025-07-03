@@ -8,6 +8,7 @@ include 'elk-basics'
 include 'liquibase'
 include 'redis-cache'
 include 'build-gradle'
+include 'unit-testing'
 
 include 'graphql-basics'
 include 'graphql-basics:graphql-server'
