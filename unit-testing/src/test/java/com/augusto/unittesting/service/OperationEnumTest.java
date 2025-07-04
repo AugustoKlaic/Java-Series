@@ -1,9 +1,10 @@
 package com.augusto.unittesting.service;
 
-import com.augusto.buildgradle.service.operation.Addition;
-import com.augusto.buildgradle.service.operation.Division;
-import com.augusto.buildgradle.service.operation.Multiplication;
-import com.augusto.buildgradle.service.operation.Subtraction;
+import com.augusto.unittesting.commons.UnitTestBase;
+import com.augusto.unittesting.service.operation.Addition;
+import com.augusto.unittesting.service.operation.Division;
+import com.augusto.unittesting.service.operation.Multiplication;
+import com.augusto.unittesting.service.operation.Subtraction;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -11,7 +12,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import static org.junit.jupiter.api.Assertions.*;
 
 @ExtendWith(MockitoExtension.class)
-class OperationEnumTest {
+class OperationEnumTest extends UnitTestBase {
 
     @Test
     void shouldReturnCorrectOperation() {

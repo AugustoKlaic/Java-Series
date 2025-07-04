@@ -1,9 +1,10 @@
 package com.augusto.unittesting.api;
 
 
-import com.augusto.buildgradle.dto.CalculationRequest;
-import com.augusto.buildgradle.dto.CalculationResponse;
-import com.augusto.buildgradle.service.CalculationService;
+
+import com.augusto.unittesting.dto.CalculationRequest;
+import com.augusto.unittesting.dto.CalculationResponse;
+import com.augusto.unittesting.service.CalculationService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;

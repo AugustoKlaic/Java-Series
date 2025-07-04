@@ -1,5 +1,7 @@
 package com.augusto.unittesting.service;
 
+import com.augusto.unittesting.service.operation.*;
+
 import java.util.Arrays;
 
 public enum OperationEnum {

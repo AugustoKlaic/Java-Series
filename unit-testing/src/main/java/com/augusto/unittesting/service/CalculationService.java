@@ -1,7 +1,7 @@
 package com.augusto.unittesting.service;
 
-import com.augusto.buildgradle.dto.CalculationRequest;
-import com.augusto.buildgradle.dto.CalculationResponse;
+import com.augusto.unittesting.dto.CalculationRequest;
+import com.augusto.unittesting.dto.CalculationResponse;
 import org.springframework.stereotype.Service;
 
 @Service

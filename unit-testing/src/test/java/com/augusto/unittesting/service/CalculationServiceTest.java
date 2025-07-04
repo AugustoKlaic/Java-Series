@@ -1,7 +1,9 @@
 package com.augusto.unittesting.service;
 
-import com.augusto.buildgradle.dto.CalculationRequest;
-import com.augusto.buildgradle.dto.CalculationResponse;
+
+import com.augusto.unittesting.commons.UnitTestBase;
+import com.augusto.unittesting.dto.CalculationRequest;
+import com.augusto.unittesting.dto.CalculationResponse;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -11,7 +13,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @ExtendWith(MockitoExtension.class)
-class CalculationServiceTest {
+class CalculationServiceTest extends UnitTestBase {
 
     @InjectMocks
     private CalculationService service;

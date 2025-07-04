@@ -1,5 +1,6 @@
 package com.augusto.unittesting.service.operation;
 
+import com.augusto.unittesting.commons.UnitTestBase;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -9,7 +10,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @ExtendWith(MockitoExtension.class)
-class DivisionTest {
+class DivisionTest extends UnitTestBase {
 
     @InjectMocks
     private Division division;
