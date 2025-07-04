@@ -6,12 +6,9 @@ import com.augusto.unittesting.service.operation.Division;
 import com.augusto.unittesting.service.operation.Multiplication;
 import com.augusto.unittesting.service.operation.Subtraction;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-@ExtendWith(MockitoExtension.class)
 class OperationEnumTest extends UnitTestBase {
 
     @Test
