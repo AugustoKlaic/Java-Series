@@ -1,4 +1,4 @@
-package com.augusto.unittesting.commons;
+package com.augusto.unittesting.config;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.extension.ExtendWith;
