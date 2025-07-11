@@ -10,18 +10,21 @@ import java.util.List;
 public class PersonService {
 
     private final PersonRepository repository;
+    private final NotificationService notificationService;
 
-    public PersonService(PersonRepository repository) {
+    public PersonService(PersonRepository repository, NotificationService notificationService) {
         this.repository = repository;
+        this.notificationService = notificationService;
     }
 
     public Person create(Person dto) {
-        if (dto.getAge() < 18) {
-            throw new IllegalArgumentException("Person must be over 18 years.");
-        }
+        if (dto.getAge() < 18) throw new IllegalArgumentException("Person must be over 18 years.");
+        if ("admin".equalsIgnoreCase(dto.getName())) throw new RuntimeException("Name not allowed");
 
-        Person person = new Person(null, dto.getName(), dto.getAge());
-        return repository.save(person);
+        Person saved = repository.save(dto);
+        notificationService.sendWelcomeMessage(saved.getName());
+
+        return saved;
     }
 
     public Person updateName(Long id, String newName) {
@@ -30,6 +33,14 @@ public class PersonService {
 
         person.setName(newName);
         return repository.save(person);
+    }
+
+    public void updateAge(Long id, int newAge) {
+        Person person = repository.findById(id).orElseThrow(() -> new IllegalArgumentException("Person not found!"));
+        if (newAge <= person.getAge()) return;
+
+        person.setAge(newAge);
+        repository.save(person);
     }
 
     public List<Person> listAll() {
