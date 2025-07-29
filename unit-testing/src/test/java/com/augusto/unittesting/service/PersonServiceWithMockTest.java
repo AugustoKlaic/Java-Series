@@ -17,7 +17,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
-class PersonServiceTest extends UnitTestBase {
+class PersonServiceWithMockTest extends UnitTestBase {
 
     @Mock
     private PersonRepository repository;
