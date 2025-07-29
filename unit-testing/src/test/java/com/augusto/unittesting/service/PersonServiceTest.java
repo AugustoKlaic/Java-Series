@@ -148,8 +148,8 @@ class PersonServiceTest extends UnitTestBase {
         assertTrue(existing.getAge() > 10);
     }
 
-    @ParameterizedTest(name = "Name ''{0}'' should be allowed")
-    @MethodSource("TestFactory#generateValidNames")
+    @ParameterizedTest(name = "shouldAllowNamesOtherThanAdmin: ''{0}''")
+    @MethodSource("com.augusto.unittesting.fixture.TestFactory#generateValidNames")
     void shouldAllowNamesOtherThanAdmin(String name) {
         Person dto = new Person(null, name, 25);
         when(repository.save(any())).thenReturn(new Person(1L, name, 25));
@@ -157,5 +157,12 @@ class PersonServiceTest extends UnitTestBase {
         Person result = service.create(dto);
 
         assertEquals(name, result.getName());
+    }
+
+    @ParameterizedTest(name = "shouldNotAllowAdminName")
+    @MethodSource("com.augusto.unittesting.fixture.TestFactory#generateInvalidName")
+    void shouldNotAllowAdminName(String name) {
+        Person dto = new Person(null, name, 25);
+        assertThrows(RuntimeException.class, () ->  service.create(dto));
     }
 }

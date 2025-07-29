@@ -5,6 +5,7 @@ import org.instancio.Instancio;
 import org.instancio.Select;
 
 import java.util.List;
+import java.util.stream.Stream;
 
 import static org.instancio.Select.field;
 
@@ -51,11 +52,16 @@ public class TestFactory {
                 .create();
     }
 
-    public static List<String> generateValidNames() {
+    public static Stream<String> generateValidNames() {
         return Instancio.ofList(String.class)
-                .size(10)
-                .generate(Select.all(String.class), gen -> gen.text().pattern("??????"))
+                .size(5)
+                .generate(Select.all(String.class), gen -> gen.string().length(5))
                 .filter(Select.all(String.class), val -> !val.toString().equalsIgnoreCase("admin"))
-                .create();
+                .create()
+                .stream();
+    }
+
+    public static Stream<String> generateInvalidName() {
+        return Stream.of("admin");
     }
 }
