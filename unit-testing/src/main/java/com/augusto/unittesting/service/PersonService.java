@@ -27,6 +27,10 @@ public class PersonService {
         return saved;
     }
 
+    public List<Person> createAll(List<Person> dtos) {
+        return dtos.stream().map(this::create).toList();
+    }
+
     public Person updateName(Long id, String newName) {
         Person person = repository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Person not found!"));
