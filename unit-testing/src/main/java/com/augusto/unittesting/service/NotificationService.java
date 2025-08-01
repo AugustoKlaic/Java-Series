@@ -8,6 +8,11 @@ import org.springframework.stereotype.Service;
 public class NotificationService {
 
     public void sendWelcomeMessage(String name) {
-        log.info("Welcome message sent to: {}", name);
+        log.info(getWelcomePrefix() + " Message sent to: {}", name);
+    }
+
+    public String getWelcomePrefix() {
+        log.info("executou getWelcomePrefix");
+        return "Welcome!";
     }
 }
