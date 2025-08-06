@@ -28,7 +28,7 @@ dependencies {
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
     testCompileOnly 'org.projectlombok:lombok'
     testAnnotationProcessor 'org.projectlombok:lombok'
-}
+    testImplementation 'com.tngtech.archunit:archunit-junit5-api:1.4.1'}
 
 tasks.named('test') {
     useJUnitPlatform()
