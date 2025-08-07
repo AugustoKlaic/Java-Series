@@ -31,7 +31,7 @@ public class TestFactory {
         return Instancio.of(Person.class)
                 .generate(field(Person::getId), gen -> gen.longs().range(1L, 100L))
                 .supply(field(Person::getName), () -> "admin")
-                .generate(field(Person::getAge), gen -> gen.ints().range(17, 18))
+                .generate(field(Person::getAge), gen -> gen.ints().range(18, 30))
                 .create();
     }
 
