@@ -1,9 +1,11 @@
-package com.augusto.unittesting.service;
+package com.augusto.unittesting.service.testingjunitfeatures;
 
 import com.augusto.unittesting.config.UnitTestBase;
 import com.augusto.unittesting.dto.Person;
 import com.augusto.unittesting.fixture.TestFactory;
 import com.augusto.unittesting.repository.PersonRepository;
+import com.augusto.unittesting.service.NotificationService;
+import com.augusto.unittesting.service.PersonService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;

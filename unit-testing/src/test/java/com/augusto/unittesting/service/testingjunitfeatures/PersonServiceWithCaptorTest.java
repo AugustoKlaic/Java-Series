@@ -1,9 +1,11 @@
-package com.augusto.unittesting.service;
+package com.augusto.unittesting.service.testingjunitfeatures;
 
 import com.augusto.unittesting.config.UnitTestBase;
 import com.augusto.unittesting.dto.Person;
 import com.augusto.unittesting.fixture.TestFactory;
 import com.augusto.unittesting.repository.PersonRepository;
+import com.augusto.unittesting.service.NotificationService;
+import com.augusto.unittesting.service.PersonService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
