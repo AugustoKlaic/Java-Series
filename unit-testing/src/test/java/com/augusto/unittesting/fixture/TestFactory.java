@@ -43,6 +43,22 @@ public class TestFactory {
                 .create();
     }
 
+    public static Person createPersonWithId(Long id) {
+        return Instancio.of(Person.class)
+                .set(field(Person::getId), id)
+                .generate(field(Person::getName), gen -> gen.text().pattern("Person####"))
+                .generate(field(Person::getAge), gen -> gen.ints().range(18, 80))
+                .create();
+    }
+
+    public static Person createPersonWithoutIdAndName(String name) {
+        return Instancio.of(Person.class)
+                .ignore(field(Person::getId))
+                .set(field(Person::getName), name)
+                .generate(field(Person::getAge), gen -> gen.ints().range(18, 80))
+                .create();
+    }
+
     public static List<Person> createListPerson() {
         return Instancio.ofList(Person.class)
                 .size(5)
@@ -63,5 +79,13 @@ public class TestFactory {
 
     public static Stream<String> generateInvalidName() {
         return Stream.of("admin");
+    }
+
+    public static Stream<Integer> generateRandomAges() {
+        return Instancio.ofList(Integer.class)
+                .size(10)
+                .generate(Select.all(), gen -> gen.ints().range(18, 80))
+                .create()
+                .stream();
     }
 }
