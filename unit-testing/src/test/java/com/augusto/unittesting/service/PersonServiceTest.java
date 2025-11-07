@@ -118,10 +118,11 @@ class PersonServiceTest extends UnitTestBase {
         @Captor
         private ArgumentCaptor<Person> personCaptor;
 
-        private void happyPathMocks() {
+        private void happyPathMocks(Person person) {
             lenient().doAnswer(ans -> {
                 Long id = ans.getArgument(0);
-                return Optional.of(TestFactory.createPersonWithId(id));
+                person.setId(id);
+                return Optional.of(person);
             }).when(repository).findById(anyLong());
 
             lenient().when(repository.save(any(Person.class))).thenAnswer(ans -> ans.getArgument(0));
@@ -144,7 +145,8 @@ class PersonServiceTest extends UnitTestBase {
 
         @Test
         void shouldUpdatePersonNameSuccessfully() {
-            happyPathMocks();
+            Person person = TestFactory.createPersonWithoutId();
+            happyPathMocks(person);
             Person result = personService.updateName(1L, "New Name");
             verifyInOrderMocksCalls();
 
@@ -160,25 +162,23 @@ class PersonServiceTest extends UnitTestBase {
             verifyErrorMocksCalls();
         }
 
-//        @ParameterizedTest(name = "shouldUpdateAgeOnlyIfNewAgeIsGreater")
-//        @MethodSource("com.augusto.unittesting.fixture.TestFactory#generateRandomAges")
-//        void shouldUpdateAgeOnlyIfNewAgeIsGreater(Integer age) {
-//            happyPathMocks();
-//            personService.updateAge(1L, age);
-//            verifyInOrderMocksCalls();
-//            assertEquals(35, personCaptor.getValue().getAge());
-//        }
-//
-//        @Test
-//        void shouldNotUpdateAgeIfNewIsSmaller() {
-//            Person existing = TestFactory.createPersonOver18Years();
-//
-//            when(repository.findById(anyLong())).thenReturn(Optional.of(existing));
-//
-//            service.updateAge(1L, 10);
-//
-//            verify(repository, never()).save(any());
-//            assertTrue(existing.getAge() > 10);
-//        }
+        @ParameterizedTest(name = "shouldUpdateAgeIfNewAgeIsGreater: ''{0}''")
+        @MethodSource("com.augusto.unittesting.fixture.TestFactory#generateRandomAges")
+        void shouldUpdateAgeIfNewAgeIsGreater(Integer age) {
+            Person person = TestFactory.createPersonWithoutIdAndAge(age-1);
+            happyPathMocks(person);
+            personService.updateAge(1L, age);
+            verifyInOrderMocksCalls();
+            assertEquals(age, personCaptor.getValue().getAge());
+        }
+
+        @ParameterizedTest(name = "shouldNotUpdateAgeIfNewAgeIsLower: ''{0}''")
+        @MethodSource("com.augusto.unittesting.fixture.TestFactory#generateRandomAges")
+        void shouldNotUpdateAgeIfNewAgeIsLower(Integer age) {
+            Person person = TestFactory.createPersonWithoutIdAndAge(age+1);
+            happyPathMocks(person);
+            personService.updateAge(1L, age);
+            verifyErrorMocksCalls();
+        }
     }
 }
