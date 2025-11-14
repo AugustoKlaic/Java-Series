@@ -1,5 +1,8 @@
 package com.augusto.unittesting.dto;
 
+import lombok.With;
+
+@With
 public class Person {
 
     private Long id;
