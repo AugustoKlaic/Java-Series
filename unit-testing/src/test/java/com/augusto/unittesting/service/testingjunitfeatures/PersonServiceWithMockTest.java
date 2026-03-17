@@ -34,7 +34,6 @@ class PersonServiceWithMockTest extends UnitTestBase {
     void shouldCreatePersonSuccessfully() {
         Person dto = TestFactory.createPersonWithoutId();
 
-        doNothing().when(notificationService).sendWelcomeMessage(anyString());
         when(repository.save(any(Person.class)))
                 .thenAnswer(ans -> {
                     Person person = ans.getArgument(0);
