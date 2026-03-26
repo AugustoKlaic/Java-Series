@@ -30,6 +30,7 @@ public class PersonServiceWithSpyTest extends UnitTestBase {
     @Test
     void shouldCallRealNotificationAndLogForCreate() {
         Person dto = createPersonWithoutId();
+        doNothing().when(notificationService).sendWelcomeMessage(anyString());
         when(repository.save(any(Person.class)))
                 .thenAnswer(ans -> {
                     Person person = ans.getArgument(0);
