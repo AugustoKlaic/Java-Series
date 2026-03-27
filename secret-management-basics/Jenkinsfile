@@ -55,7 +55,7 @@ pipeline {
                     sh '''
                         docker stop secrets-app || true
                         docker rm secrets-app || true
-                        docker build -t secrets-app ./secrets-basics
+                        docker build -t secrets-app ./secrets-management-basics
                         docker run -d \
                           --name secrets-app \
                           -p 8080:8080 \
