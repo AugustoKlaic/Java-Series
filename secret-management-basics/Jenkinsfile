@@ -1,0 +1,61 @@
+pipeline {
+    agent { label 'agent-01' }
+
+    stages {
+
+        stage('Fetch Secrets') {
+            steps {
+                infisicalSecrets(
+                    infisicalUrl: 'http://infisical:80',
+                    infisicalCredentialId: 'infisical-token',
+                    projectSlug: 'java-secrets-management',
+                    environment: 'dev',
+                    secrets: [
+                        [infisicalKey: 'DB_PASSWORD',  secretPath: '/', envVarName: 'DB_PASSWORD'],
+                        [infisicalKey: 'API_KEY',       secretPath: '/', envVarName: 'API_KEY'],
+                        [infisicalKey: 'APP_ENV',       secretPath: '/', envVarName: 'APP_ENV']
+                    ]
+                ) {
+                    echo "Secrets fetched successfully!"
+                }
+            }
+        }
+
+        stage('Build') {
+            steps {
+                dir('secrets-basics') {
+                    sh 'gradle bootJar'
+                }
+            }
+        }
+
+        stage('Deploy') {
+            steps {
+                infisicalSecrets(
+                    infisicalUrl: 'http://infisical:80',
+                    infisicalCredentialId: 'infisical-token',
+                    projectSlug: 'java-secrets-demo',
+                    environment: 'dev',
+                    secrets: [
+                        [infisicalKey: 'DB_PASSWORD',  secretPath: '/', envVarName: 'DB_PASSWORD'],
+                        [infisicalKey: 'API_KEY',       secretPath: '/', envVarName: 'API_KEY'],
+                        [infisicalKey: 'APP_ENV',       secretPath: '/', envVarName: 'APP_ENV']
+                    ]
+                ) {
+                    sh '''
+                        docker stop secrets-app || true
+                        docker rm secrets-app || true
+                        docker build -t secrets-app ./secrets-basics
+                        docker run -d \
+                          --name secrets-app \
+                          -p 8080:8080 \
+                          -e DB_PASSWORD=$DB_PASSWORD \
+                          -e API_KEY=$API_KEY \
+                          -e APP_ENV=$APP_ENV \
+                          secrets-app
+                    '''
+                }
+            }
+        }
+    }
+}
