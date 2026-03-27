@@ -1,70 +1,83 @@
 pipeline {
     agent { label 'agent-01' }
 
+    environment {
+        VAULT_ADDR = 'http://vault:8200'
+    }
+
     stages {
 
-        stage('Fetch Secrets & Build') {
+        stage('Fetch Secrets') {
             steps {
-                withInfisical(
-                    configuration: [
-                        infisicalUrl: 'https://nginx',
-                        infisicalCredentialId: 'infisical-token',
-                        infisicalProjectSlug: 'java-secrets-management',
-                        infisicalEnvironmentSlug: 'dev'
-                    ],
-                    infisicalSecrets: [
-                        infisicalSecret(
-                            path: '/',
-                            includeImports: true,
-                            secretValues: [
-                                [infisicalKey: 'DB_PASSWORD'],
-                                [infisicalKey: 'API_KEY'],
-                                [infisicalKey: 'APP_ENV']
-                            ]
-                        )
-                    ]
-                ) {
-                    dir('secret-management-basics') {
-                        sh 'gradle bootJar'
+                withCredentials([
+                    string(credentialsId: 'vault-role-id',    variable: 'ROLE_ID'),
+                    string(credentialsId: 'vault-secret-id',  variable: 'SECRET_ID')
+                ]) {
+                    script {
+                        // 1. Autentica via AppRole e pega token temporario
+                        def vaultToken = sh(
+                            script: """
+                                curl -s -X POST ${VAULT_ADDR}/v1/auth/jenkins-role/login \
+                                  -H 'Content-Type: application/json' \
+                                  -d '{"role_id":"${ROLE_ID}","secret_id":"${SECRET_ID}"}' \
+                                  | grep -o '"client_token":"[^"]*' | cut -d'"' -f4
+                            """,
+                            returnStdout: true
+                        ).trim()
+
+                        // 2. Busca todos os secrets de uma vez
+                        def secrets = sh(
+                            script: """
+                                curl -s ${VAULT_ADDR}/v1/secret/data/java-secrets-demo \
+                                  -H "X-Vault-Token: ${vaultToken}"
+                            """,
+                            returnStdout: true
+                        ).trim()
+
+                        // 3. Extrai cada secret
+                        env.DB_PASSWORD = sh(
+                            script: "echo '${secrets}' | grep -o '\"DB_PASSWORD\":\"[^\"]*' | cut -d'\"' -f4",
+                            returnStdout: true
+                        ).trim()
+
+                        env.API_KEY = sh(
+                            script: "echo '${secrets}' | grep -o '\"API_KEY\":\"[^\"]*' | cut -d'\"' -f4",
+                            returnStdout: true
+                        ).trim()
+
+                        env.APP_ENV = sh(
+                            script: "echo '${secrets}' | grep -o '\"APP_ENV\":\"[^\"]*' | cut -d'\"' -f4",
+                            returnStdout: true
+                        ).trim()
+
+                        echo "Secrets fetched successfully!"
                     }
+                }
+            }
+        }
+
+        stage('Build') {
+            steps {
+                dir('{YOUR_PROJECT_FOLDER}') {
+                    sh 'gradle bootJar'
                 }
             }
         }
 
         stage('Deploy') {
             steps {
-                withInfisical(
-                    configuration: [
-                        infisicalUrl: 'https://nginx',
-                        infisicalCredentialId: 'infisical-token',
-                        infisicalProjectSlug: 'java-secrets-management',
-                        infisicalEnvironmentSlug: 'dev'
-                    ],
-                    infisicalSecrets: [
-                        infisicalSecret(
-                            path: '/',
-                            includeImports: true,
-                            secretValues: [
-                                [infisicalKey: 'DB_PASSWORD'],
-                                [infisicalKey: 'API_KEY'],
-                                [infisicalKey: 'APP_ENV']
-                            ]
-                        )
-                    ]
-                ) {
-                    sh '''
-                        docker stop secrets-app || true
-                        docker rm secrets-app || true
-                        docker build -t secrets-app ./secrets-management-basics
-                        docker run -d \
-                          --name secrets-app \
-                          -p 8080:8080 \
-                          -e DB_PASSWORD=$DB_PASSWORD \
-                          -e API_KEY=$API_KEY \
-                          -e APP_ENV=$APP_ENV \
-                          secrets-app
-                    '''
-                }
+                sh '''
+                    docker stop secrets-app || true
+                    docker rm secrets-app || true
+                    docker build -t secrets-app ./{YOUR_PROJECT_FOLDER}
+                    docker run -d \
+                      --name secrets-app \
+                      -p 8080:8080 \
+                      -e DB_PASSWORD=$DB_PASSWORD \
+                      -e API_KEY=$API_KEY \
+                      -e APP_ENV=$APP_ENV \
+                      secrets-app
+                '''
             }
         }
     }
