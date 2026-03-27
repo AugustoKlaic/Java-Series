@@ -5,7 +5,7 @@ pipeline {
 
         stage('Fetch Secrets') {
             steps {
-                infisicalSecrets(
+                withInfisical(
                     infisicalUrl: 'http://infisical:80',
                     infisicalCredentialId: 'infisical-token',
                     projectSlug: 'java-secrets-management',
@@ -23,7 +23,7 @@ pipeline {
 
         stage('Build') {
             steps {
-                dir('secrets-basics') {
+                dir('secret-management-basics') {
                     sh 'gradle bootJar'
                 }
             }
@@ -31,7 +31,7 @@ pipeline {
 
         stage('Deploy') {
             steps {
-                infisicalSecrets(
+                withInfisical(
                     infisicalUrl: 'http://infisical:80',
                     infisicalCredentialId: 'infisical-token',
                     projectSlug: 'java-secrets-demo',
