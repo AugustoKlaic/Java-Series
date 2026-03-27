@@ -3,28 +3,30 @@ pipeline {
 
     stages {
 
-        stage('Fetch Secrets') {
+        stage('Fetch Secrets & Build') {
             steps {
                 withInfisical(
-                    infisicalUrl: 'http://infisical:80',
-                    infisicalCredentialId: 'infisical-token',
-                    projectSlug: 'java-secrets-management',
-                    environment: 'dev',
-                    secrets: [
-                        [infisicalKey: 'DB_PASSWORD',  secretPath: '/', envVarName: 'DB_PASSWORD'],
-                        [infisicalKey: 'API_KEY',       secretPath: '/', envVarName: 'API_KEY'],
-                        [infisicalKey: 'APP_ENV',       secretPath: '/', envVarName: 'APP_ENV']
+                    configuration: [
+                        infisicalUrl: 'http://infisical:80',
+                        infisicalCredentialId: 'jenkins-secret-management',
+                        infisicalProjectSlug: 'java-secrets-management',
+                        infisicalEnvironmentSlug: 'dev'
+                    ],
+                    infisicalSecrets: [
+                        infisicalSecret(
+                            path: '/',
+                            includeImports: true,
+                            secretValues: [
+                                [infisicalKey: 'DB_PASSWORD'],
+                                [infisicalKey: 'API_KEY'],
+                                [infisicalKey: 'APP_ENV']
+                            ]
+                        )
                     ]
                 ) {
-                    echo "Secrets fetched successfully!"
-                }
-            }
-        }
-
-        stage('Build') {
-            steps {
-                dir('secret-management-basics') {
-                    sh 'gradle bootJar'
+                    dir('secrets-basics') {
+                        sh 'gradle bootJar'
+                    }
                 }
             }
         }
@@ -32,14 +34,22 @@ pipeline {
         stage('Deploy') {
             steps {
                 withInfisical(
-                    infisicalUrl: 'http://infisical:80',
-                    infisicalCredentialId: 'infisical-token',
-                    projectSlug: 'java-secrets-demo',
-                    environment: 'dev',
-                    secrets: [
-                        [infisicalKey: 'DB_PASSWORD',  secretPath: '/', envVarName: 'DB_PASSWORD'],
-                        [infisicalKey: 'API_KEY',       secretPath: '/', envVarName: 'API_KEY'],
-                        [infisicalKey: 'APP_ENV',       secretPath: '/', envVarName: 'APP_ENV']
+                    configuration: [
+                        infisicalUrl: 'http://infisical:80',
+                        infisicalCredentialId: 'java-secrets-management',
+                        infisicalProjectSlug: 'java-secrets-management',
+                        infisicalEnvironmentSlug: 'dev'
+                    ],
+                    infisicalSecrets: [
+                        infisicalSecret(
+                            path: '/',
+                            includeImports: true,
+                            secretValues: [
+                                [infisicalKey: 'DB_PASSWORD'],
+                                [infisicalKey: 'API_KEY'],
+                                [infisicalKey: 'APP_ENV']
+                            ]
+                        )
                     ]
                 ) {
                     sh '''
