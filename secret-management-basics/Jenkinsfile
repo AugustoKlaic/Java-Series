@@ -1,6 +1,10 @@
 pipeline {
     agent { label 'agent-01' }
 
+    environment {
+        INFISICAL_DISABLE_HTTPS = 'true'
+    }
+
     stages {
 
         stage('Fetch Secrets & Build') {
