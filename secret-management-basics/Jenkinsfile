@@ -1,17 +1,13 @@
 pipeline {
     agent { label 'agent-01' }
 
-    environment {
-        INFISICAL_DISABLE_HTTPS = 'true'
-    }
-
     stages {
 
         stage('Fetch Secrets & Build') {
             steps {
                 withInfisical(
                     configuration: [
-                        infisicalUrl: 'http://infisical-backend:8080',
+                        infisicalUrl: 'https://nginx',
                         infisicalCredentialId: 'infisical-token',
                         infisicalProjectSlug: 'java-secrets-management',
                         infisicalEnvironmentSlug: 'dev'
@@ -39,7 +35,7 @@ pipeline {
             steps {
                 withInfisical(
                     configuration: [
-                        infisicalUrl: 'http://infisical-backend:8080',
+                        infisicalUrl: 'https://nginx',
                         infisicalCredentialId: 'infisical-token',
                         infisicalProjectSlug: 'java-secrets-management',
                         infisicalEnvironmentSlug: 'dev'
