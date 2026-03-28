@@ -3,7 +3,7 @@ pipeline {
 
     environment {
         VAULT_ADDR            = 'http://vault:8200'
-        YOUR_PROJECT_FOLDER   = 'Java-series/secret-management-basics'
+        YOUR_PROJECT_FOLDER = 'secret-management-basics'
     }
 
     stages {
@@ -67,6 +67,7 @@ pipeline {
         stage('Build') {
             steps {
                 dir("${YOUR_PROJECT_FOLDER}") {
+                    sh 'chmod +x gradlew'
                     sh './gradlew bootJar'
                 }
             }
