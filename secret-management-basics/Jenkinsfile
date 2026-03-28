@@ -2,11 +2,18 @@ pipeline {
     agent { label 'agent-01' }
 
     environment {
-        VAULT_ADDR = 'http://vault:8200'
-        YOUR_PROJECT_FOLDER = 'Java-series/secret-management-basics'
+        VAULT_ADDR            = 'http://vault:8200'
+        YOUR_PROJECT_FOLDER   = 'Java-series/secret-management-basics'
     }
 
     stages {
+
+        stage('Checkout') {
+            steps {
+                git branch: 'master',
+                    url: 'https://github.com/AugustoKlaic/Java-Series.git'
+            }
+        }
 
         stage('Fetch Secrets') {
             steps {
@@ -59,26 +66,26 @@ pipeline {
 
         stage('Build') {
             steps {
-                dir('{YOUR_PROJECT_FOLDER}') {
-                    sh 'gradle bootJar'
+                dir("${YOUR_PROJECT_FOLDER}") {
+                    sh './gradlew bootJar'
                 }
             }
         }
 
         stage('Deploy') {
             steps {
-                sh '''
+                sh """
                     docker stop secrets-app || true
                     docker rm secrets-app || true
-                    docker build -t secrets-app ./{YOUR_PROJECT_FOLDER}
+                    docker build -t secrets-app ./${YOUR_PROJECT_FOLDER}
                     docker run -d \
                       --name secrets-app \
                       -p 8080:8080 \
-                      -e DB_PASSWORD=$DB_PASSWORD \
-                      -e API_KEY=$API_KEY \
-                      -e APP_ENV=$APP_ENV \
+                      -e DB_PASSWORD=${env.DB_PASSWORD} \
+                      -e API_KEY=${env.API_KEY} \
+                      -e APP_ENV=${env.APP_ENV} \
                       secrets-app
-                '''
+                """
             }
         }
     }
