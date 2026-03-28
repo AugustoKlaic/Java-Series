@@ -7,14 +7,6 @@ pipeline {
     }
 
     stages {
-
-        stage('Checkout') {
-            steps {
-                git branch: 'master',
-                    url: 'https://github.com/AugustoKlaic/Java-Series.git'
-            }
-        }
-
         stage('Fetch Secrets') {
             steps {
                 withCredentials([
