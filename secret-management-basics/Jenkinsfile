@@ -1,64 +1,24 @@
 pipeline {
     agent { label 'agent-01' }
 
+    options {
+        timeout(time: 10, unit: 'MINUTES')        // if stuck abort
+        buildDiscarder(logRotator(numToKeepStr: '10')) // mantain only 10 builds
+        disableConcurrentBuilds()                  // no parallel builds for the same job
+    }
+
     environment {
-        VAULT_ADDR            = 'http://vault:8200'
-        YOUR_PROJECT_FOLDER = 'secret-management-basics'
+        VAULT_ADDR     = 'http://vault:8200'
+        PROJECT_FOLDER = 'secret-management-basics'
+        APP_IMAGE      = 'secrets-app'
+        APP_CONTAINER  = 'secrets-app'
+        APP_PORT       = '8080'
     }
 
     stages {
-        stage('Fetch Secrets') {
-            steps {
-                withCredentials([
-                    string(credentialsId: 'vault-role-id',    variable: 'ROLE_ID'),
-                    string(credentialsId: 'vault-secret-id',  variable: 'SECRET_ID')
-                ]) {
-                    script {
-                        // 1. Autentica via AppRole e pega token temporario
-                        def vaultToken = sh(
-                            script: """
-                                curl -s -X POST ${VAULT_ADDR}/v1/auth/jenkins-role/login \
-                                  -H 'Content-Type: application/json' \
-                                  -d '{"role_id":"${ROLE_ID}","secret_id":"${SECRET_ID}"}' \
-                                  | grep -o '"client_token":"[^"]*' | cut -d'"' -f4
-                            """,
-                            returnStdout: true
-                        ).trim()
-
-                        // 2. Busca todos os secrets de uma vez
-                        def secrets = sh(
-                            script: """
-                                curl -s ${VAULT_ADDR}/v1/secret/data/java-secrets-demo \
-                                  -H "X-Vault-Token: ${vaultToken}"
-                            """,
-                            returnStdout: true
-                        ).trim()
-
-                        // 3. Extrai cada secret
-                        env.DB_PASSWORD = sh(
-                            script: "echo '${secrets}' | grep -o '\"DB_PASSWORD\":\"[^\"]*' | cut -d'\"' -f4",
-                            returnStdout: true
-                        ).trim()
-
-                        env.API_KEY = sh(
-                            script: "echo '${secrets}' | grep -o '\"API_KEY\":\"[^\"]*' | cut -d'\"' -f4",
-                            returnStdout: true
-                        ).trim()
-
-                        env.APP_ENV = sh(
-                            script: "echo '${secrets}' | grep -o '\"APP_ENV\":\"[^\"]*' | cut -d'\"' -f4",
-                            returnStdout: true
-                        ).trim()
-
-                        echo "Secrets fetched successfully!"
-                    }
-                }
-            }
-        }
-
         stage('Build') {
             steps {
-                dir("${YOUR_PROJECT_FOLDER}") {
+                dir("${PROJECT_FOLDER}") {
                     sh 'chmod +x gradlew'
                     sh './gradlew bootJar'
                 }
@@ -67,19 +27,57 @@ pipeline {
 
         stage('Deploy') {
             steps {
-                sh """
-                    docker stop secrets-app || true
-                    docker rm secrets-app || true
-                    docker build -t secrets-app ./${YOUR_PROJECT_FOLDER}
-                    docker run -d \
-                      --name secrets-app \
-                      -p 8080:8080 \
-                      -e DB_PASSWORD=${env.DB_PASSWORD} \
-                      -e API_KEY=${env.API_KEY} \
-                      -e APP_ENV=${env.APP_ENV} \
-                      secrets-app
-                """
+                // withVault: search secrets in vault by AppRole and inject them as environment variables only inside this block.
+                // The plugin takes care of:
+                //   - AppRole auth
+                //   - token lifecycle (revoke after use)
+                //   - automatic masking in logs
+                withVault(
+                    configuration: [
+                        vaultUrl: env.VAULT_ADDR,
+                        vaultCredentialId: 'vault-approle', // "Vault App Role" credential type in Jenkins
+                        engineVersion: 2
+                    ],
+                    vaultSecrets: [
+                        [
+                            path: 'secret/data/java-secrets-demo',
+                            engineVersion: 2,
+                            secretValues: [
+                                [envVar: 'DB_PASSWORD', vaultKey: 'DB_PASSWORD'],
+                                [envVar: 'API_KEY',     vaultKey: 'API_KEY'],
+                                [envVar: 'APP_ENV',     vaultKey: 'APP_ENV']
+                            ]
+                        ]
+                    ]
+                ) {
+                    sh '''
+                        docker stop $APP_CONTAINER || true
+                        docker rm   $APP_CONTAINER || true
+
+                        docker build -t $APP_IMAGE ./$PROJECT_FOLDER
+
+                        docker run -d \
+                          --name $APP_CONTAINER \
+                          -p $APP_PORT:8080 \
+                          -e DB_PASSWORD="$DB_PASSWORD" \
+                          -e API_KEY="$API_KEY" \
+                          -e APP_ENV="$APP_ENV" \
+                          $APP_IMAGE
+                    '''
+                }
             }
+        }
+    }
+
+    post {
+        success {
+            echo "Deployed! App available on port: ${APP_PORT}."
+        }
+        failure {
+            echo "Failed! Take a look at the logs."
+        }
+        always {
+            cleanWs() // clean agent's workspace after build
         }
     }
 }
