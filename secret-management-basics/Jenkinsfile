@@ -40,7 +40,7 @@ pipeline {
                     ],
                     vaultSecrets: [
                         [
-                            path: 'secret/data/java-secrets-demo',
+                            path: 'secret/java-secrets-demo',
                             engineVersion: 2,
                             secretValues: [
                                 [envVar: 'DB_PASSWORD', vaultKey: 'DB_PASSWORD'],
