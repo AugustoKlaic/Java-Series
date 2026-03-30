@@ -1,33 +1,29 @@
-# 1. Variaveis de ambiente
-export VAULT_ADDR=http://0.0.0.0:8200
-export VAULT_TOKEN=root-token
-
-# 2. Habilita o AppRole
+# 1. Enable AppRole
 vault auth enable -path=jenkins-role approle
 
-# 3. Cria a policy do Jenkins
+# 2. Create Jenkins's policy
 vault policy write jenkins-policy - <<EOF
 path "secret/data/java-secrets-demo" {
   capabilities = ["read"]
 }
 EOF
 
-# 4. Cria o role vinculado a policy
+# 3. Create policy's role
 vault write auth/jenkins-role/role/jenkins-role \
   token_policies="jenkins-policy" \
   token_ttl=1h \
   token_max_ttl=4h
 
-# 5. Cria os secrets da aplicacao
+# 4. Create app's secrets
 vault kv put secret/java-secrets-demo \
-  DB_PASSWORD="minha-senha-secreta" \
+  DB_PASSWORD="my-secret-password" \
   API_KEY="abc123-key-xpto" \
   APP_ENV="development"
 
-# 6. Pega o Role ID
+# 5. Get Role ID
 echo "=== ROLE ID ==="
 vault read -field=role_id auth/jenkins-role/role/jenkins-role/role-id
 
-# 7. Gera o Secret ID
+# 6. Generate Secret ID
 echo "=== SECRET ID ==="
 vault write -f -field=secret_id auth/jenkins-role/role/jenkins-role/secret-id
