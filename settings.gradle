@@ -10,7 +10,7 @@ include 'redis-cache'
 include 'build-gradle'
 include 'unit-testing'
 include 'secret-management-basics'
-include 'AI-local-basics'
+include 'ai-rag-basics'
 
 include 'graphql-basics'
 include 'graphql-basics:graphql-server'
