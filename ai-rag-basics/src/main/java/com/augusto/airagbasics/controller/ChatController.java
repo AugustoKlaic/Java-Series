@@ -19,7 +19,13 @@ public class ChatController {
     @PostMapping("/ingest")
     public String ingestDocument() {
         documentIngestionService.ingestDocument();
-        return  "Ingestion Done";
+        return "Ingestion Done";
+    }
+
+    @DeleteMapping("/ingest")
+    public String deleteIngestion() {
+        documentIngestionService.deleteIngestion();
+        return "Ingestion Cleared";
     }
 
     @GetMapping("/chat")

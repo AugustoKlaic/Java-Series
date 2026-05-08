@@ -33,6 +33,11 @@ public class DocumentIngestionService {
         this.documentPath = documentPath;
     }
 
+    public void deleteIngestion() {
+        embeddingStore.removeAll();
+        System.out.println("Ingestion cleared");
+    }
+
     public void ingestDocument() {
         List<Document> documents = FileSystemDocumentLoader.loadDocuments(Path.of(documentPath));
 
