@@ -2,10 +2,10 @@ package com.augusto.airagbasics.config;
 
 import dev.langchain4j.data.segment.TextSegment;
 import dev.langchain4j.model.embedding.EmbeddingModel;
+import dev.langchain4j.model.embedding.onnx.e5smallv2.E5SmallV2EmbeddingModel;
 import dev.langchain4j.model.openai.OpenAiChatModel;
-import dev.langchain4j.model.openai.OpenAiEmbeddingModel;
 import dev.langchain4j.store.embedding.EmbeddingStore;
-import dev.langchain4j.store.embedding.qdrant.QdrantEmbeddingStore;
+import dev.langchain4j.store.embedding.pgvector.PgVectorEmbeddingStore;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -19,14 +19,20 @@ public class RagConfig {
     @Value("${spring.ai.openai.base-url}")
     private String baseUrl;
 
-    @Value("${qdrant.host}")
-    private String qdrantHost;
+    @Value("${pgvector.host}")
+    private String pgHost;
 
-    @Value("${qdrant.port}")
-    private Integer qdrantPort;
+    @Value("${pgvector.port}")
+    private Integer pgPort;
 
-    @Value("${qdrant.collection}")
-    private String qdrantCollection;
+    @Value("${pgvector.database}")
+    private String pgDatabase;
+
+    @Value("${pgvector.user}")
+    private String pgUser;
+
+    @Value("${pgvector.password}")
+    private String pgPassword;
 
     /*
         for understanding language and generating responses
@@ -36,7 +42,7 @@ public class RagConfig {
         return OpenAiChatModel.builder()
                 .apiKey(apiKey)
                 .baseUrl(baseUrl)
-                .modelName("meta-lamma/llama-3.1-8b-instruct:free")
+                .modelName("openai/gpt-oss-120b:free")
                 .build();
     }
 
@@ -45,11 +51,7 @@ public class RagConfig {
      */
     @Bean
     public EmbeddingModel embeddingModel() {
-        return OpenAiEmbeddingModel.builder()
-                .apiKey(apiKey)
-                .baseUrl(baseUrl)
-                .modelName("text-embedding-ada-002")
-                .build();
+        return new E5SmallV2EmbeddingModel();
     }
 
     /*
@@ -57,10 +59,15 @@ public class RagConfig {
      */
     @Bean
     public EmbeddingStore<TextSegment> embeddingStore() {
-        return QdrantEmbeddingStore.builder()
-                .host(qdrantHost)
-                .port(qdrantPort)
-                .collectionName(qdrantCollection)
+        return PgVectorEmbeddingStore.builder()
+                .host(pgHost)
+                .port(pgPort)
+                .database(pgDatabase)
+                .user(pgUser)
+                .password(pgPassword)
+                .table("documents")
+                .dimension(384)
+                .createTable(true)
                 .build();
     }
 }

@@ -21,12 +21,17 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter'
     implementation 'org.springframework.boot:spring-boot-starter-web'
 
+    implementation platform('dev.langchain4j:langchain4j-bom:1.0.0')
+
     // LangChain4j core
-    implementation 'dev.langchain4j:langchain4j:0.36.2'
+    implementation 'dev.langchain4j:langchain4j'
+
+    // embedding model
+    implementation 'dev.langchain4j:langchain4j-embeddings-e5-small-v2'
 
     // OpenRouter (compatível com OpenAI)
-    implementation 'dev.langchain4j:langchain4j-open-ai:0.36.2'
+    implementation 'dev.langchain4j:langchain4j-open-ai'
 
-    // Qdrant
-    implementation 'dev.langchain4j:langchain4j-qdrant:0.36.2'
+    // PGVector
+    implementation 'dev.langchain4j:langchain4j-pgvector'
 }

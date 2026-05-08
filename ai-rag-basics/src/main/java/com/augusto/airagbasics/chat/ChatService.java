@@ -28,7 +28,7 @@ public class ChatService {
                 .build();
 
         this.assistant = AiServices.builder(Assistant.class)
-                .chatLanguageModel(chatModel)
+                .chatModel(chatModel)
                 .contentRetriever(retriever)
                 .build();
     }
