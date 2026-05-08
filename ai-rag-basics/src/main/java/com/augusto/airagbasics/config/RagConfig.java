@@ -16,6 +16,9 @@ public class RagConfig {
     @Value("${spring.ai.openai.api-key}")
     private String apiKey;
 
+    @Value("${spring.ai.openai.base-url}")
+    private String baseUrl;
+
     @Value("${qdrant.host}")
     private String qdrantHost;
 
@@ -32,7 +35,7 @@ public class RagConfig {
     public OpenAiChatModel chatModel() {
         return OpenAiChatModel.builder()
                 .apiKey(apiKey)
-                .baseUrl("https://openrouter.ai/api/v1")
+                .baseUrl(baseUrl)
                 .modelName("meta-lamma/llama-3.1-8b-instruct:free")
                 .build();
     }
@@ -44,7 +47,7 @@ public class RagConfig {
     public EmbeddingModel embeddingModel() {
         return OpenAiEmbeddingModel.builder()
                 .apiKey(apiKey)
-                .baseUrl("https://openrouter.ai/api/v1")
+                .baseUrl(baseUrl)
                 .modelName("text-embedding-ada-002")
                 .build();
     }
