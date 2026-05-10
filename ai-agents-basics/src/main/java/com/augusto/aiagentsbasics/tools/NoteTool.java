@@ -18,11 +18,11 @@ public class NoteTool {
 
     @Tool("Save a note into a file. Use when user asks to write or save a text.")
     public String saveNote(String fileName, String content) {
-        Path path = Path.of(notesPath, fileName + ".txt");
+        Path path = Path.of(notesPath, fileName);
         try {
             Files.createDirectories(path.getParent());
             Files.writeString(path, content, StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING);
-            return "Note has been saved with name: " + fileName + ".txt";
+            return "Note has been saved with name: " + fileName;
         } catch (IOException e) {
             return "Error while saving note: " + e.getMessage();
         }
@@ -30,7 +30,7 @@ public class NoteTool {
 
     @Tool("Read the content from a saved note. Use when user asks to read or see a note.")
     public String loadNote(String fileName) {
-        Path path = Path.of(notesPath, fileName + ".txt");
+        Path path = Path.of(notesPath, fileName);
         if (!Files.exists(path)) {
             return "Note with name: " + fileName + ".txt does not exist";
         }
