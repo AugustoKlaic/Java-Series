@@ -1,4 +1,4 @@
-rootProject.name = "java-series"
+rootProject.name = "Java-series"
 
 buildCache {
     local {

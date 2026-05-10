@@ -1,4 +1,4 @@
-rootProject.name = "java-series"
+rootProject.name = "Java-series"
 
 include 'jenkins-basics'
 include 'rabbitmq-basics'
@@ -11,8 +11,10 @@ include 'build-gradle'
 include 'unit-testing'
 include 'secret-management-basics'
 include 'ai-rag-basics'
+include 'ai-agents-basics'
 
 include 'graphql-basics'
 include 'graphql-basics:graphql-server'
 include 'graphql-basics:graphql-info-provider-a'
 include 'graphql-basics:graphql-info-provider-b'
+
