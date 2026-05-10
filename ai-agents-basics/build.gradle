@@ -21,10 +21,13 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter'
     implementation 'org.springframework.boot:spring-boot-starter-web'
 
+    // LangChain4j
     implementation platform('dev.langchain4j:langchain4j-bom:1.0.0-beta2')
     implementation 'dev.langchain4j:langchain4j'
     implementation 'dev.langchain4j:langchain4j-open-ai'
-    implementation 'dev.langchain4j:langchain4j-spring-boot-starter'
+
+    // Redis
+    implementation 'org.springframework.boot:spring-boot-starter-data-redis'
 
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
 }
