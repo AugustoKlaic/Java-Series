@@ -12,6 +12,7 @@ include 'unit-testing'
 include 'secret-management-basics'
 include 'ai-rag-basics'
 include 'ai-agents-basics'
+include 'kubernetes-basics'
 
 include 'graphql-basics'
 include 'graphql-basics:graphql-server'
