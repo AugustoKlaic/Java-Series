@@ -52,5 +52,5 @@ bin/
 **/target/**
 
 # Kubernetes config — regenerated automatically on every cluster start
-kubeconfig/
+kubeconfig/*
 !kubeconfig/.gitkeep
