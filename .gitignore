@@ -50,3 +50,6 @@ bin/
 
 ### cucumber ###
 **/target/**
+
+# Kubernetes config — regenerated automatically on every cluster start
+kubeconfig/

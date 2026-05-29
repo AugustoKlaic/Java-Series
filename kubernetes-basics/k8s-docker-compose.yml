@@ -18,7 +18,7 @@ services:
   k3s:
     image: rancher/k3s:latest
     container_name: k3s
-    command: server
+    command: server --tls-san k3s
     privileged: true
     tmpfs:
       - /run
