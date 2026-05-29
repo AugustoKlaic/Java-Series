@@ -85,6 +85,9 @@ services:
     image: derailed/k9s:latest
     profiles:
       - tools                               # won't start with docker compose up
+    dns:
+      - 8.8.8.8
+      - 8.8.4.4
     environment:
       - KUBECONFIG=/kubeconfig/kubeconfig.yaml
     volumes:
