@@ -1,0 +1,102 @@
+services:
+  # ─────────────────────────────────────────
+  # Local registry — stores our app image
+  # k3s will pull the image from here
+  # ─────────────────────────────────────────
+  registry:
+    image: registry:2
+    container_name: registry
+    ports:
+      - "5000:5000"
+    networks:
+      - k8s-net
+
+  # ─────────────────────────────────────────
+  # K3s — lightweight Kubernetes cluster
+  # runs as a single container (server + worker)
+  # ─────────────────────────────────────────
+  k3s:
+    image: rancher/k3s:latest
+    container_name: k3s
+    command: server
+    privileged: true
+    tmpfs:
+      - /run
+      - /var/run
+    ulimits:
+      nproc: 65535
+      nofile:
+        soft: 65535
+        hard: 65535
+    environment:
+      - K3S_TOKEN=kubernetes-basics-token
+      - K3S_KUBECONFIG_OUTPUT=/output/kubeconfig.yaml
+      - K3S_KUBECONFIG_MODE=666
+    volumes:
+      - type: volume
+        source: k3s-data
+        target: /var/lib/rancher/k3s
+      - type: bind
+        source: ./kubeconfig
+        target: /output
+      - type: bind
+        source: ./k3s-registries.yaml       # tells k3s where the local registry is
+        target: /etc/rancher/k3s/registries.yaml
+    ports:
+      - "6443:6443"     # Kubernetes API
+      - "8080:80"       # HTTP ingress
+    networks:
+      - k8s-net
+    depends_on:
+      - registry
+
+  # ─────────────────────────────────────────
+  # App — builds the image and pushes to registry
+  # ─────────────────────────────────────────
+  app:
+    build: .
+    image: localhost:5000/kubernetes-basics:1.0.0
+    networks:
+      - k8s-net
+    depends_on:
+      - registry
+
+  # ─────────────────────────────────────────
+  # kubectl — CLI to interact with k3s
+  # usage: docker compose run --rm kubectl get pods
+  # ─────────────────────────────────────────
+  kubectl:
+    image: bitnami/kubectl:latest
+    entrypoint: ["kubectl"]
+    profiles:
+      - tools                               # won't start with docker compose up
+    environment:
+      - KUBECONFIG=/kubeconfig/kubeconfig.yaml
+    volumes:
+      - ./kubeconfig:/kubeconfig
+    networks:
+      - k8s-net
+
+  # ─────────────────────────────────────────
+  # k9s — visual terminal UI for the cluster
+  # usage: docker compose run --rm k9s
+  # ─────────────────────────────────────────
+  k9s:
+    image: derailed/k9s:latest
+    profiles:
+      - tools                               # won't start with docker compose up
+    environment:
+      - KUBECONFIG=/kubeconfig/kubeconfig.yaml
+    volumes:
+      - ./kubeconfig:/kubeconfig
+    networks:
+      - k8s-net
+    stdin_open: true
+    tty: true
+
+networks:
+  k8s-net:
+    driver: bridge
+
+volumes:
+  k3s-data:                                 # persistent volume for k3s cluster data
